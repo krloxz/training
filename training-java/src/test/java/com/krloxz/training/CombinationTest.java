@@ -25,7 +25,7 @@ public class CombinationTest {
 	@Test
 	public void shouldFindNCombinationsWhenChoosingRFromN() {
 		final Character[] array = {'A', 'B', 'C', 'D', 'E'};
-		final List<Object[]> combinations = combine(array, 3);
+		final List<Object[]> combinations = combine(array, 2);
 		assertThat(combinations.size(), is(10));
 		
 		System.out.println("Result:");
