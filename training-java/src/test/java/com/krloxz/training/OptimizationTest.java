@@ -11,6 +11,7 @@ import java.util.stream.*;
 public class OptimizationTest {
 
     @Test
+    // @Disabled
     public void test() {
         // Integer[0] = ID, Integer[1] = cost
         final List<Integer[]> pairs1 = Arrays.<Integer[]>asList(
@@ -25,10 +26,7 @@ public class OptimizationTest {
         );
         final int optimalCost = 10;
 
-        final List<Integer[]> optimalCombination = findOptimalCombination(pairs1, pairs2, optimalCost);
-        // optimalCombination.stream()
-        //     .forEach(e -> System.out.println(Arrays.toString(e)));
-        assertThat(optimalCombination,
+        assertThat(findOptimalCombination(pairs1, pairs2, optimalCost),
             contains(arrayContaining(2, 1)));
     }
 
@@ -48,15 +46,11 @@ public class OptimizationTest {
         );
         final int optimalCost = 10;
 
-        final List<Integer[]> optimalCombination = findOptimalCombination(pairs1, pairs2, optimalCost);
-        // optimalCombination.stream()
-        //     .forEach(e -> System.out.println(Arrays.toString(e)));
-        assertThat(optimalCombination,
-            contains(arrayContaining(13, 21), arrayContaining(14, 22)));
+        assertThat(findOptimalCombination(pairs1, pairs2, optimalCost),
+            contains(arrayContaining(11, 21), arrayContaining(12, 21), arrayContaining(12, 22)));
     }
 
     @Test
-    @Disabled("Won't find the proper combination; is pair repetition allowed?")
     public void test3() {
         // Integer[0] = ID, Integer[1] = cost
         final List<Integer[]> pairs1 = Arrays.<Integer[]>asList(
@@ -73,30 +67,20 @@ public class OptimizationTest {
         );
         final int optimalCost = 10;
 
-        final List<Integer[]> optimalCombination = findOptimalCombination(pairs1, pairs2, optimalCost);
-        // optimalCombination.stream()
-        //     .forEach(e -> System.out.println(Arrays.toString(e)));
-        assertThat(optimalCombination,
+        assertThat(findOptimalCombination(pairs1, pairs2, optimalCost),
             contains(arrayContaining(11, 21), arrayContaining(14, 21)));
     }
 
-    private List<Integer[]> findOptimalCombination(List<Integer[]> pairs1, List<Integer[]> pairs2, int optimalCost) {
+    private List<Integer[]> findOptimalCombination(final List<Integer[]> pairs1, final List<Integer[]> pairs2, final int optimalCost) {
         final List<Integer> costs =  pairs1.stream()
             .flatMap(p1 -> pairs2.stream().map(p2 -> p1[1] + p2[1]))
             // .peek(c -> System.out.println(c))
-            // .sorted()
             .collect(Collectors.toList());
 
-        final Deque<Integer> optimalCostSequences = IntStream.range(0, costs.size())
-            .mapToObj(e -> findOptimalCostSequence(costs, e, optimalCost))
-            .filter(e -> e.getLast() > 0)
-            // .peek(e -> System.out.println(e))
-            .max((e1, e2) -> e1.getLast().compareTo(e2.getLast()))
-            .get();
-        optimalCostSequences.removeLast();
-
-        return optimalCostSequences.stream()
-            .map(e -> {
+        final int[] bestCostIndexes = findBestCostIndexes(optimalCost, costs);
+        return IntStream.range(0, costs.size())
+            .filter(e -> bestCostIndexes[e] == 1)
+            .mapToObj(e -> {
                 return new Integer[] {
                     pairs1.get(e / pairs2.size())[0],
                     pairs2.get(e % pairs2.size())[0]
@@ -106,18 +90,33 @@ public class OptimizationTest {
             .collect(Collectors.toList());
     }
 
-    private Deque<Integer> findOptimalCostSequence(final List<Integer> costs, final int start, int optimalCost) {
-        final Deque<Integer> bestCosts = new ArrayDeque<>();
-        int totalCost = 0;
-        for (int i = start; i < costs.size() + start; i++) {
-            final int costsIndex = i % costs.size();
-            if (totalCost + costs.get(costsIndex) <= optimalCost) {
-                bestCosts.add(costsIndex);
-                totalCost += costs.get(costsIndex);
+    private int[] findBestCostIndexes(final int optimal, final List<Integer> costs) {
+        final int[][] bestCosts = new int[costs.size() + 1][optimal + 1];
+        for (int i = 0; i <= costs.size(); i++) {
+            for (int j = 0; j <= optimal; j++) {
+                if (i == 0 || j == 0) {
+                    bestCosts[i][j] = 0;
+                } else {
+                    final int previousBestCost = bestCosts[i - 1][j];
+                    final int currentCost = costs.get(i - 1);
+                    if (currentCost > j) {
+                        bestCosts[i][j] = previousBestCost;
+                    } else {
+                        bestCosts[i][j] = Math.max(previousBestCost, currentCost + bestCosts[i - 1][j - currentCost]);
+                    }
+                }
             }
         }
-        bestCosts.add(totalCost);
-        return bestCosts;
+
+        final int[] bestCostIndexes = new int[costs.size()];
+        int x = optimal;
+        for (int i = bestCosts.length - 1; i > 0; i--) {
+            if (bestCosts[i][x] > bestCosts[i - 1][x]) {
+                bestCostIndexes[i - 1] = 1;
+                x -= costs.get(i - 1);
+            }
+        }
+        return bestCostIndexes;
     }
 
 }
