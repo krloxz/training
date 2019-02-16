@@ -33,5 +33,6 @@ test {
 }
 
 testlogger {
+    theme 'mocha'
     showStandardStreams true
 }
