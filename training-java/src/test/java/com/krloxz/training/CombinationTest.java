@@ -16,10 +16,10 @@ public class CombinationTest {
 		final List<Object[]> combinations = combine(array, 1);
 		assertThat(combinations.size(), is(3));
 		
-		System.out.println("Result:");
-		combinations.stream()
-			.map(a -> Arrays.toString(a))
-			.forEach(e -> System.out.println(e));
+		// System.out.println("Result:");
+		// combinations.stream()
+		// 	.map(a -> Arrays.toString(a))
+		// 	.forEach(e -> System.out.println(e));
 	}
 
 	@Test
@@ -28,10 +28,10 @@ public class CombinationTest {
 		final List<Object[]> combinations = combine(array, 2);
 		assertThat(combinations.size(), is(10));
 		
-		System.out.println("Result:");
-		combinations.stream()
-			.map(a -> Arrays.toString(a))
-			.forEach(e -> System.out.println(e));
+		// System.out.println("Result:");
+		// combinations.stream()
+		// 	.map(a -> Arrays.toString(a))
+		// 	.forEach(e -> System.out.println(e));
 	}
 
 	private List<Object[]> combine(Object[] array, int size) {

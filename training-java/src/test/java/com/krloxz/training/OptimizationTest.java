@@ -26,8 +26,8 @@ public class OptimizationTest {
         final int optimalCost = 10;
 
         final List<Integer[]> optimalCombination = findOptimalCombination(pairs1, pairs2, optimalCost);
-        optimalCombination.stream()
-            .forEach(e -> System.out.println(Arrays.toString(e)));
+        // optimalCombination.stream()
+        //     .forEach(e -> System.out.println(Arrays.toString(e)));
         assertThat(optimalCombination,
             contains(arrayContaining(2, 1)));
     }
@@ -49,8 +49,8 @@ public class OptimizationTest {
         final int optimalCost = 10;
 
         final List<Integer[]> optimalCombination = findOptimalCombination(pairs1, pairs2, optimalCost);
-        optimalCombination.stream()
-            .forEach(e -> System.out.println(Arrays.toString(e)));
+        // optimalCombination.stream()
+        //     .forEach(e -> System.out.println(Arrays.toString(e)));
         assertThat(optimalCombination,
             contains(arrayContaining(13, 21), arrayContaining(14, 22)));
     }
@@ -74,8 +74,8 @@ public class OptimizationTest {
         final int optimalCost = 10;
 
         final List<Integer[]> optimalCombination = findOptimalCombination(pairs1, pairs2, optimalCost);
-        optimalCombination.stream()
-            .forEach(e -> System.out.println(Arrays.toString(e)));
+        // optimalCombination.stream()
+        //     .forEach(e -> System.out.println(Arrays.toString(e)));
         assertThat(optimalCombination,
             contains(arrayContaining(11, 21), arrayContaining(14, 21)));
     }

@@ -25,13 +25,13 @@ public class IndexCombinationTest {
         final List<int[]> combinations = combine(5, 3);
         assertThat(combinations.size(), is(10));
         
-        final Character[] array = {'A', 'B', 'C', 'D', 'E'};
-        combinations.stream()
-            .forEach(e -> {
-                IntStream.of(e)
-                    .forEach(i -> System.out.print(array[i] + ","));
-                System.out.println();
-            });
+        // final Character[] array = {'A', 'B', 'C', 'D', 'E'};
+        // combinations.stream()
+        //     .forEach(e -> {
+        //         IntStream.of(e)
+        //             .forEach(i -> System.out.print(array[i] + ","));
+        //         System.out.println();
+        //     });
     }
 
     private List<int[]> combine(int n, int r) {
